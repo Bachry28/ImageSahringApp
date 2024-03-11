@@ -29,13 +29,15 @@ app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument))
 
 app.use("/", userregisterroutes);
 
-
 app.use("/", userloginroutes);
-
 
 app.use("/comment", commentroutes);
 
 app.use("/post", postroutes);
+
+app.use("/post/upload", postroutes)
+
+app.use("/upload", userloginroutes)
 
 
 

@@ -1,16 +1,24 @@
 import React, { useState } from "react";
-import { loginUser } from "../modules/fetch/index"; 
+import { useNavigate } from "react-router-dom";
+import { loginUser } from "../modules/fetch/index";
 
 export default function LoginForm({ onRegisterClick }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
       const userData = await loginUser(username, password);
-      console.log("Login successful:", userData);
+      console.log("Login successful. User ID:", userData.userId); // Log userId specifically
+      if (userData && userData.userId) {
+        // Store userId in local storage
+        localStorage.setItem("user_id", userData.userId);
+        console.log("userId found:", userData.userId); 
+        // Redirect to landing page
+        navigate('/landingpage');
+      }
     } catch (error) {
       setError(error.message);
       console.error("Login failed:", error);

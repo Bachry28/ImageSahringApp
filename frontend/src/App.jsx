@@ -1,36 +1,18 @@
-import React, { useState } from "react";
-import LoginForm from "./component/LoginForm"
-import RegistrationForm from "./component/RegistrationForm";
+import { useState } from 'react'
+// import './App.css'
+import UserLogin from './pages/UserLogin'
 
 function App() {
-  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
-
-  const openRegisterModal = () => {
-    setIsRegisterModalOpen(true);
-  };
-
-  const closeRegisterModal = () => {
-    setIsRegisterModalOpen(false);
-  };
+  
+  const [count, setCount] = useState(0)
 
   return (
-    <div className="flex w-full h-screen">
-      <div className="w-full flex items-center justify-center lg:w-1/2">
-        <LoginForm onRegisterClick={openRegisterModal} /> {/* Menyampaikan fungsi openRegisterModal */}
+    <>
+      <div className='bg-white'>
+        <UserLogin/>
       </div>
-
-      <div className="hidden relative lg:flex h-full w-1/2 items-center justify-center bg-blue-100">
-        <div className="text-3xl">Hi What You Wont To Sharing for As</div>
-        <div className="w-60 h-60 bg-gradient-to-tr from-violet-500 to bg-pink-400 rounded-full animate-bounce"></div>
-        <div className="w-full h-1/1 absolute bottom-0 bg-white/10 backdrop-blur-lg"></div>
-      </div>
-
-      <RegistrationForm
-        isOpen={isRegisterModalOpen}
-        onClose={closeRegisterModal}
-      />
-    </div>
-  );
+    </>
+  )
 }
 
-export default App;
+export default App

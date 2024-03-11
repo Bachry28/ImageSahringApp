@@ -33,9 +33,10 @@ const postcontroller = {
     },
     createpost: async (req, res) => {
         try {
+            const { title, description } = req.body; // Extract title and description from request body
             const image = req.file ? req.file.path : 'default_path_if_file_not_present';
-            const user_id= parseInt(req.body.user_id)
-
+            const user_id = parseInt(req.body.user_id);
+    
             const post = await prisma.post.create({
                 data: {
                     user_id,
@@ -50,6 +51,7 @@ const postcontroller = {
             res.status(500).json({ message: "Failed to create post", error });
         }
     },
+    
     updatePost: async (req, res) => {
         try {
             const image = req.file ? req.file.path : 'default_path_if_file_not_present';
@@ -60,12 +62,13 @@ const postcontroller = {
             const updatedPost = await prisma.post.update({
                 where: { post_id: Number(id) },
                 data: {
-                    user_id,
-                    title,
-                    description,
-                    image
+                  user: { connect: { user_id } }, // Assuming user_id is the correct field name
+                  title,
+                  description,
+                  image
                 }
-            });
+              });
+              
             res.status(200).json({ message: "Successfully updated post", post: updatedPost });
         } catch (error) {
             console.error("Error updating post:", error);

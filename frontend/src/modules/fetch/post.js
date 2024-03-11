@@ -30,16 +30,17 @@ async function getpostById(id) {
   }
   
 
-  async function updatedPost(post_id, formData) {
+  async function updatePost(id, formData) {
     try {
-      const response = await instance.put(`/post/${post_id}/update`, formData,{
-        headers: { 'Content-Type': 'multipart/form-data' }
-    });
-      return response.data;
+        console.log('Post ID:', id); // Log the post ID before making the request
+        const response = await instance.put(`/post/${id}`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        return response.data;
     } catch (error) {
-      throw new Error(error.response.data.message || 'Something went wrong');
+        throw new Error(error.response.data.message || 'Something went wrong');
     }
-  }
+}
   
   async function deletePost(id) {
     try {
@@ -50,4 +51,4 @@ async function getpostById(id) {
     }
   }
 
-  export{getAllpost, getpostById, createpost, updatedPost, deletePost}
+  export{getAllpost, getpostById, createpost, updatePost, deletePost}
