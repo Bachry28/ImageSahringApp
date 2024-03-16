@@ -1,23 +1,35 @@
-import React, {useEffect, useState} from "react";
-import { updatePost } from "../modules/fetch/post";
+import React, { useEffect, useState } from "react";
+import { updatePost, getpostById } from "../modules/fetch/post";
 
-const UpdateForm = ({ post, onAdd, onClose, userId }) => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [postId, setPostId] = useState(null);
+  const UpdateForm = ({ post, onAdd, onClose, userId }) => {
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [image, setImage] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [postId, setPostId] = useState(null);
 
-  useEffect(() => {
-    console.log("Post data:", post); 
-    if (post && post.post_id) {
-      console.log("Post ID before setting:", post.post_id); 
-      setPostId(post.post_id); 
-    }
-  }, [post]);
+    const fetchPostById = async (postId) => {
+      try {
+        const post = await getpostById(postId);
+        if (post) {
+          setTitle(post.title);
+          setDescription(post.description);
+          setImage(post.image);
+        }
+      } catch (error) {
+        console.error("Failed to fetch post:", error);
+      }
+    };
   
-  console.log("Post ID state:", postId); // Log the post ID state
-
+    useEffect(() => {
+      console.log("Post data:", post);
+      if (post && post.post_id) {
+        setPostId(post.post_id);
+        fetchPostById(post.post_id); // Call fetchPostById when post changes
+      }
+    }, [post]);
+  
+   
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -27,8 +39,6 @@ const UpdateForm = ({ post, onAdd, onClose, userId }) => {
       formData.append("title", title);
       formData.append("description", description);
       formData.append("image", image);
-  
-      console.log("Post ID before update:", postId); // Log the post ID before sending update request
 
       const postUpdating = await updatePost(postId, formData);
       onAdd(postUpdating);
@@ -41,14 +51,9 @@ const UpdateForm = ({ post, onAdd, onClose, userId }) => {
     }
   };
 
-  console.log("Title state:", title); // Log the title state
-  console.log("Description state:", description); // Log the description state
-  console.log("Image state:", image); // Log the image state
-
   const handleCancel = () => {
     onClose();
   };
-
 
   return (
     <form onSubmit={handleSubmit}>

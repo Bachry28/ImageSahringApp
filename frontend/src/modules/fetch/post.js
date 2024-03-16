@@ -30,10 +30,10 @@ async function getpostById(id) {
   }
   
 
-  async function updatePost(id, formData) {
+  async function updatePost(id, formDataupdate) {
     try {
         console.log('Post ID:', id); // Log the post ID before making the request
-        const response = await instance.put(`/post/${id}`, formData, {
+        const response = await instance.put(`/post/${id}`, formDataupdate, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
         return response.data;

@@ -3,13 +3,13 @@ import { getAllpost, getpostById, deletePost } from '../modules/fetch/post';
 import { getSpecificUser } from '../modules/fetch/index';
 import { FaArrowAltCircleRight, FaPencilAlt, FaTrashAlt } from 'react-icons/fa';
 import Addpost from '../component/NewPost';
-import UpdateForm from '../component/UpdatePost';
+import UpdateForm from '../component/Editpost';
 
 function LandingPage() {
   const [data, setData] = useState([]);
   const [showAddPost, setShowAddPost] = useState(false);
   const [showUpdateForm, setShowUpdateForm] = useState(false);
-const [selectedPostId, setSelectedPostId] = useState(null); // Menambahkan state untuk menyimpan id pos yang dipilih
+  const [selectedPostId, setSelectedPostId] = useState(null); // Menambahkan state untuk menyimpan id pos yang dipilih
   const [comment, setComment] = useState("");
   const [user, setUser] = useState(null);
 
@@ -57,16 +57,18 @@ const [selectedPostId, setSelectedPostId] = useState(null); // Menambahkan state
 
   const editRow = async (post_id) => {
     try {
+      console.log("Post ID:", post_id);
       const post = await getpostById(post_id);
       console.log("Post:", post);
-      setSelectedPostId(post_id); // Menyimpan id pos yang dipilih
+      setSelectedPostId(post.post.post_id);
+      console.log("Selected Post ID:", selectedPostId);
       setShowUpdateForm(true);
     } catch (error) {
       console.error("Error updating post:", error);
     }
   };
   
-  // Updated toggleUpdatePost function to toggle correct state variable
+
   const toggleUpdateForm = () => {
     setShowUpdateForm(!showUpdateForm);
   };
