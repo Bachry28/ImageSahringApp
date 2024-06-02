@@ -1,41 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { updatePost, getpostById } from "../modules/fetch/post";
+import { updatePost} from "../modules/fetch/post";
 
-  const UpdateForm = ({ post, onAdd, onClose, userId }) => {
+  const UpdateForm = ({ postId, onAdd, onClose, userId }) => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [image, setImage] = useState("");
     const [loading, setLoading] = useState(false);
-    const [postId, setPostId] = useState(null);
 
-    const fetchPostById = async (postId) => {
-      try {
-        const post = await getpostById(postId);
-        if (post) {
-          setTitle(post.title);
-          setDescription(post.description);
-          setImage(post.image);
-        }
-      } catch (error) {
-        console.error("Failed to fetch post:", error);
-      }
-    };
-  
-    useEffect(() => {
-      console.log("Post data:", post);
-      if (post && post.post_id) {
-        setPostId(post.post_id);
-        fetchPostById(post.post_id); // Call fetchPostById when post changes
-      }
-    }, [post]);
-  
-   
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
       const formData = new FormData();
       formData.append("user_id", userId);
+      formData.append("post_id", postId);
       formData.append("title", title);
       formData.append("description", description);
       formData.append("image", image);

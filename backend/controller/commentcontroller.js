@@ -12,24 +12,53 @@ const commentcontroller = {
             res.status(500).json({ message: "Failed to fetch comments", error });
         }
     },
-    getcommentById: async (req, res) => {
-        try {
-            const { id } = req.params;
+    // getcommentById: async (req, res) => {
+    //     try {
+    //         const { post_id } = req.params;
            
-            const comment = await prisma.comment.findUnique({
-                where: { comment_id: Number(id) },
-            });
-            if (!comment) {
+    //         const comment = await prisma.comment.findUnique({
+    //             where: { comment_id: Number(id) },
+    //         });
+    //         if (!comment) {
               
-                res.status(404).json({ message: `Comment with ID ${id} not found` });
+    //             res.status(404).json({ message: `Comment with ID ${id} not found` });
+    //             return;
+    //         }
+    //         res.status(200).json({ message: "Successfully fetched comment by ID", comment });
+    //     } catch (error) {
+    //         console.error("Error fetching comment by ID:", error);
+    //         res.status(500).json({ message: "Failed to fetch comment by ID", error });
+    //     }
+    // },
+    getCommentByPostId: async (req, res) => {
+        try {
+            const { post_id } = req.params;
+            console.log(`Received post ID: ${post_id}`);  // Log post_id
+    
+            const postId = Number(post_id);
+    
+            if (isNaN(postId)) {
+                res.status(400).json({ message: "Invalid post ID" });
                 return;
             }
-            res.status(200).json({ message: "Successfully fetched comment by ID", comment });
+    
+            const comments = await prisma.comment.findMany({
+                where: { post_id: postId },
+            });
+    
+            if (!comments || comments.length === 0) {
+                res.status(404).json({ message: `Comments for post ID ${post_id} not found` });
+                return;
+            }
+    
+            res.status(200).json({ message: "Successfully fetched comments by post ID", comments });
         } catch (error) {
-            console.error("Error fetching comment by ID:", error);
-            res.status(500).json({ message: "Failed to fetch comment by ID", error });
+            console.error("Error fetching comments by post ID:", error);
+            res.status(500).json({ message: "Failed to fetch comments by post ID", error });
         }
     },
+    
+    
     createcomment: async (req, res) => {
         try {
             const { user_id, post_id, comment } = req.body; 
