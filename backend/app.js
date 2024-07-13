@@ -1,5 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const dotenv = require('dotenv');
+dotenv.config({ path: '.env.local' });
 const cors = require('cors');
 const path = require('path');
 const express = require('express');
@@ -25,7 +27,7 @@ app.use(cors({
 }));
 
 
-app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument))
+// app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument))
 
 app.use("/", userregisterroutes);
 

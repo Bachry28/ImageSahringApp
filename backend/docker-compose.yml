@@ -1,0 +1,30 @@
+version: '3'  # Update to the latest version if necessary
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  imageapp:
+    build: .  # Build the service from the current directory (backend)
+    networks:
+      - app-tier  # Connect this service to the app-tier network
+    ports:
+      - "8000:8000"  # Forward port 8000 from host to container
+    depends_on:
+      - pgsqldb  # Declare that this service depends on pgsqldb
+    volumes:
+      - "./:/imageapp/src/app"  # Map the entire backend directory to /backend in the container
+    env_file:
+      - .env.docker  # Use the Docker-specific .env file
+
+  pgsqldb:
+    image: postgres:16
+    ports:
+      - "5432:5432"  # Forward port 5432 from host to container
+    environment:
+      POSTGRES_USER: postgres  # PostgreSQL user name
+      POSTGRES_PASSWORD: 280595  # Password for the PostgreSQL user
+      POSTGRES_DB: Imagesharing_App  # Name of the database to be created
+    networks:
+      - app-tier  # Connect this service to the app-tier network
